@@ -17,6 +17,7 @@ class DataTablesList extends Component {
       filters: {},
       sort: {},
       perPage: 10,
+      searchTerm: '',
     };
 
     this.data = {
@@ -78,12 +79,14 @@ class DataTablesList extends Component {
   searchItems = (event) => {
     event.preventDefault();
 
+    const searchTerm = this.search.value;
+
     const filters = {
-      title: { $regex: this.search.value, $options: 'i' },
-      body: { $regex: this.search.value, $options: 'i' },
+      title: { $regex: searchTerm, $options: 'i' },
+      body: { $regex: searchTerm, $options: 'i' },
     };
 
-    this.setState({ filters, loading: true });
+    this.setState({ filters, loading: true, searchTerm });
   };
 
   gridSort = (sortColumn, sortDirection) => {
@@ -116,6 +119,7 @@ class DataTablesList extends Component {
     const {
       loading,
       perPage,
+      searchTerm,
     } = this.state;
 
     if (loading) {
@@ -167,6 +171,7 @@ class DataTablesList extends Component {
                   <input
                     name="search"
                     ref={(c) => { this.search = c; }}
+                    defaultValue={searchTerm}
                     type="search"
                     className="form-control input-sm"
                     placeholder="Search..."
